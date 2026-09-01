@@ -22,7 +22,7 @@ public class SceneSequence : MonoBehaviour
         subtitleText.text = "";
         blackPanel.SetActive(false);
 
-        // Esperamos un frame para que Unity inicialice Timeline.
+        
         yield return null;
 
         timeline.time = 0;
@@ -158,7 +158,7 @@ public class SceneSequence : MonoBehaviour
             1.5f
         );
 
-        // Campesino cae en Timeline
+        
         yield return Wait(0.7f);
 
 
