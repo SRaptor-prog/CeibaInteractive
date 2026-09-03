@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using UnityEngine.InputSystem.Controls;
 
 public class QTEManager : MonoBehaviour
 {
@@ -23,9 +24,12 @@ public class QTEManager : MonoBehaviour
     [SerializeField] private int buttonsRequired = 5;
     [SerializeField] private float buttonsDuration = 5f;
 
-    [Header("QTE 2 - Agitar")]
-    [SerializeField] private int shakesRequired = 10;
+    [Header("QTE Agitar")]
+    [SerializeField] private int shakesRequired = 8;
     [SerializeField] private float shakeDuration = 6f;
+    [SerializeField] private float degreesPerShake = 15f;
+
+    [SerializeField] private Transform ds4Motion;
 
     [Header("QTE 3 - Gatillos")]
     [SerializeField] private int triggersRequired = 10;
@@ -147,39 +151,61 @@ public class QTEManager : MonoBehaviour
     }
 
     // KeTeE 2 - Terremoto
-    
+
 
     private IEnumerator ShakeQTE(System.Action<bool> result)
     {
-        int completedShakes = 0;
-        int lastSide = 0;
-
+        int shakes = 0;
         float timeLeft = shakeDuration;
 
-        while (timeLeft > 0f && completedShakes < shakesRequired)
+        float accumulatedMovement = 0f;
+
+        Quaternion lastRotation = ds4Motion.localRotation;
+
+        while (timeLeft > 0f && shakes < shakesRequired)
         {
             instructionText.text = "¡FORCEJEA!";
-            symbolText.text = "A       D";
+            symbolText.text = "¡AGITA EL MANDO!";
 
-            int side = ReadShake();
+            Quaternion currentRotation = ds4Motion.localRotation;
 
-            if (side != 0 && side != lastSide)
+            float movement =
+                Quaternion.Angle(lastRotation, currentRotation);
+
+            // Ignoramos movimientos minúsculos / ruido
+            if (movement > 0.2f)
             {
-                lastSide = side;
-                completedShakes++;
+                accumulatedMovement += movement;
             }
+
+            // Cuando acumulamos suficiente movimiento,
+            // cuenta como una sacudida
+            if (accumulatedMovement >= degreesPerShake)
+            {
+                shakes++;
+
+                accumulatedMovement = 0f;
+
+                Debug.Log(
+                    "Sacudida " +
+                    shakes +
+                    "/" +
+                    shakesRequired
+                );
+            }
+
+            lastRotation = currentRotation;
 
             UpdateTimer(ref timeLeft, shakeDuration);
 
             yield return null;
         }
 
-        result(completedShakes >= shakesRequired);
+        result(shakes >= shakesRequired);
     }
 
-    
     // KeTeE 3 - Piu Piu (gatillos) 
-  
+
 
     private IEnumerator TriggersQTE(System.Action<bool> result)
     {

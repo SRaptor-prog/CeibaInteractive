@@ -1,0 +1,203 @@
+using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
+
+public sealed class GyroInputTester : MonoBehaviour
+{
+  
+
+    private const string LayoutName = "DualShock4GamepadHIDCustom";
+
+    private const string LayoutJson = @"
+    {
+        ""name"": ""DualShock4GamepadHIDCustom"",
+        ""extend"": ""DualShock4GamepadHID"",
+        ""controls"": [
+            {
+                ""name"": ""gyro"",
+                ""format"": ""VC3S"",
+                ""offset"": 13,
+                ""layout"": ""Vector3"",
+                ""processors"": ""ScaleVector3(x=-1,y=-1,z=1)""
+            },
+            {
+                ""name"": ""gyro/x"",
+                ""format"": ""SHRT"",
+                ""offset"": 0
+            },
+            {
+                ""name"": ""gyro/y"",
+                ""format"": ""SHRT"",
+                ""offset"": 2
+            },
+            {
+                ""name"": ""gyro/z"",
+                ""format"": ""SHRT"",
+                ""offset"": 4
+            },
+
+            {
+                ""name"": ""accel"",
+                ""format"": ""VC3S"",
+                ""offset"": 19,
+                ""layout"": ""Vector3"",
+                ""processors"": ""ScaleVector3(x=-1,y=-1,z=1)""
+            },
+            {
+                ""name"": ""accel/x"",
+                ""format"": ""SHRT"",
+                ""offset"": 0
+            },
+            {
+                ""name"": ""accel/y"",
+                ""format"": ""SHRT"",
+                ""offset"": 2
+            },
+            {
+                ""name"": ""accel/z"",
+                ""format"": ""SHRT"",
+                ""offset"": 4
+            }
+        ]
+    }";
+
+   
+
+    private Quaternion accumulatedGyro = Quaternion.identity;
+
+    private InputAction gyroAction;
+
+    private bool layoutRegistered = false;
+
+
+  
+
+    private static Quaternion GyroInputToRotation(
+        InputAction.CallbackContext context)
+    {
+        Vector3 gyro = context.ReadValue<Vector3>();
+
+       
+        const double GyroToAngle =
+            16.0 * 360.0 / System.Math.PI;
+
+        double deltaTime =
+            context.time -
+            context.control.device.lastUpdateTime;
+
+        deltaTime =
+            System.Math.Min(deltaTime, 1.0 / 60.0);
+
+        return Quaternion.Euler(
+            gyro *
+            (float)(GyroToAngle * deltaTime)
+        );
+    }
+
+
+    
+    
+
+    private void Start()
+    {
+      
+        InputSystem.RegisterLayoutOverride(LayoutJson);
+
+        layoutRegistered = true;
+
+        gyroAction =
+            new InputAction(
+                binding: "<Gamepad>/gyro"
+            );
+
+        gyroAction.performed += OnGyro;
+
+        gyroAction.Enable();
+    }
+
+
+ 
+
+    private void OnGyro(
+        InputAction.CallbackContext context)
+    {
+        accumulatedGyro *=
+            GyroInputToRotation(context);
+    }
+
+
+  
+
+    private void Update()
+    {
+        
+        Quaternion rotation =
+            transform.localRotation;
+
+        rotation *= accumulatedGyro;
+
+        accumulatedGyro =
+            Quaternion.identity;
+
+
+        
+
+        Vector3Control accel =
+            Gamepad.current?
+                .GetChildControl<Vector3Control>(
+                    "accel"
+                );
+
+        Vector3 gravity =
+            accel != null
+                ? accel.ReadValue()
+                : -Vector3.up;
+
+
+
+        Quaternion compensation =
+            Quaternion.FromToRotation(
+                rotation * gravity,
+                -Vector3.up
+            );
+
+        compensation.w *=
+            0.2f / Time.deltaTime;
+
+        compensation =
+            compensation.normalized;
+
+
+      
+        transform.localRotation =
+            compensation * rotation;
+    }
+
+
+    
+
+    private void OnDestroy()
+    {
+        
+        if (gyroAction != null)
+        {
+            gyroAction.performed -= OnGyro;
+
+            gyroAction.Disable();
+
+            gyroAction.Dispose();
+
+            gyroAction = null;
+        }
+
+
+        if (layoutRegistered)
+        {
+            InputSystem.RemoveLayout(
+                LayoutName
+            );
+
+            layoutRegistered = false;
+        }
+    }
+}
