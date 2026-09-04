@@ -32,10 +32,15 @@ public class SceneSequence : MonoBehaviour
     [Header("Voces Narrador")]
     [SerializeField] private AudioClip[] vocesNarrador;
 
+
     private IEnumerator Start()
     {
         subtitleText.text = "";
-        blackPanel.SetActive(false);
+
+        if (blackPanel != null)
+        {
+            blackPanel.SetActive(false);
+        }
 
         yield return null;
 
@@ -45,304 +50,368 @@ public class SceneSequence : MonoBehaviour
         StartCoroutine(Story());
     }
 
+
     private IEnumerator Story()
     {
-        yield return Subtitle(
-            "CAMINO DE CAMPO — NOCHE",
-            2f,
-            vocesNarrador[0]
+        // STORYBOARD 1
+
+        yield return SubtitleTimeline(
+            0.0,
+            4.8,
+            "CAMINO DE CAMPO — NOCHE"
         );
 
-        yield return Subtitle(
+        yield return SubtitleTimeline(
+            5.0,
+            9.0,
             "Guajiro: Arre, Canela… vamos, mi’ja.\n" +
-            "Que esta noche está demasiado callá pa’ mi gusto.",
-            4f,
-            vocesGuajiro[0]
+            "Que esta noche está demasiado callá pa’ mi gusto."
         );
 
-        yield return Wait(1f);
 
+        // STORYBOARD 2
         // llora
-        yield return Wait(2f);
 
-        yield return Subtitle(
-            "Guajiro: ¿Eh? ¿Quién anda ahí?",
-            2f,
-            vocesGuajiro[1]
+
+        // STORYBOARD 3
+
+        yield return SubtitleTimeline(
+            13.2,
+            15.0,
+            "Guajiro: ¿Eh? ¿Quién anda ahí?"
         );
 
+
+        // STORYBOARD 4
         // aparece la guagua
-        yield return Wait(1f);
 
+
+        // STORYBOARD 5
         // KeTeE Random
-        yield return PlayQTE(QTEManager.QTEType.Buttons);
 
-        yield return Subtitle(
+        yield return WaitUntilTimeline(
+            16.1
+        );
+
+        yield return PlayQTE(
+            QTEManager.QTEType.Buttons
+        );
+
+        yield return SubtitleTimeline(
+            16.2,
+            19.7,
             "Guajiro: Ay, bendito…\n" +
-            "¿Y tú qué haces aquí solito, muchachito?",
-            3.5f,
-            vocesGuajiro[2]
+            "¿Y tú qué haces aquí solito, muchachito?"
         );
 
-        yield return Wait(1f);
 
-        yield return Subtitle(
-            "Guajiro: Na’, ven acá. No te voy a dejar botao en medio del monte.",
-            3.5f,
-            vocesGuajiro[3]
+        // STORYBOARD 6
+
+        yield return SubtitleTimeline(
+            19.9,
+            23.5,
+            "Guajiro: Na’, ven acá. No te voy a dejar botao en medio del monte."
         );
 
-        // wawa fea se acerca a guajiro full hd 
-        yield return Wait(1f);
-        yield return Wait(1f);
 
-        yield return Subtitle(
-            "MOMENTOS DESPUÉS",
-            1.5f,
-            vocesNarrador[1]
+        // STORYBOARD 7
+
+        yield return SubtitleTimeline(
+            25.2,
+            27.5,
+            "MOMENTOS DESPUÉS"
         );
 
-        yield return Wait(1f);
 
-        yield return Subtitle(
-            "Guajiro: ¿Qué fue? ¿Tienes hambre?",
-            2.5f,
-            vocesGuajiro[4]
+        // STORYBOARD 8
+
+        yield return SubtitleTimeline(
+            29.7,
+            32.4,
+            "Guajiro: ¿Qué fue? ¿Tienes hambre?"
         );
 
-        yield return Wait(1f);
-
-        yield return Subtitle(
-            "Guajiro: Aguántate un tantico, que algo debo tener por aquí.",
-            3f,
-            vocesGuajiro[5]
+        yield return SubtitleTimeline(
+            32.5,
+            36.9,
+            "Guajiro: Aguántate un tantico, que algo debo tener por aquí."
         );
 
-        yield return Wait(1f);
 
-        // diente
-        yield return Wait(3f);
+        // STORYBOARD 9
+        // diente / transformación
 
-        yield return Subtitle(
+
+        // STORYBOARD 10
+
+        yield return SubtitleTimeline(
+            40.1,
+            43.0,
             "Guajiro: Ave María Purísima…\n" +
-            "¿Pero qué cosa eres tú?",
-            3f,
-            vocesGuajiro[6]
+            "¿Pero qué cosa eres tú?"
         );
 
-        yield return Subtitle(
-            "Niño: Tengo hambre.",
-            2f,
-            vocesNino[0]
+
+        // STORYBOARD 11
+
+        yield return SubtitleTimeline(
+            43.1,
+            44.6,
+            "Niño: Tengo hambre."
         );
 
-        // Ataque
-        yield return Wait(0.3f);
-
-        yield return Subtitle(
-            "Guajiro: ¡Quítate de arriba, condenao!",
-            2f,
-            vocesGuajiro[7]
+        yield return SubtitleTimeline(
+            44.7,
+            47.0,
+            "Guajiro: ¡Quítate de arriba, condenao!"
         );
 
+
+        // STORYBOARD 12
         // KeTeE terremoto
-        yield return PlayQTE(QTEManager.QTEType.Shake);
 
-        yield return Subtitle(
-            "Niño: ¡Tengo hambre!",
-            1.5f,
-            vocesNino[1]
+        yield return WaitUntilTimeline(
+            47.3
         );
 
-        yield return Subtitle(
-            "Guajiro: ¡Pues conmigo te vas a quedar con ella!",
-            2.5f,
-            vocesGuajiro[8]
+        yield return PlayQTE(
+            QTEManager.QTEType.Shake
         );
 
+        yield return SubtitleTimeline(
+            47.4,
+            48.9,
+            "Niño: ¡Tengo hambre!"
+        );
+
+        yield return SubtitleTimeline(
+            49.0,
+            51.2,
+            "Guajiro: ¡Pues conmigo te vas a quedar con ella!"
+        );
+
+
+        // STORYBOARD 13
         // Empuja
-        yield return Wait(0.5f);
 
-        yield return Wait(0.5f);
 
-        yield return Subtitle(
-            "Guajiro: ¡Arre, Canela! ¡Arre, mi’ja!",
-            2f,
-            vocesGuajiro[9]
+        // STORYBOARD 14
+
+        yield return SubtitleTimeline(
+            52.4,
+            55.3,
+            "Guajiro: ¡Arre, Canela! ¡Arre, mi’ja!"
         );
 
-        // runnnn **** runnn
-        yield return Wait(1f);
 
+        // STORYBOARD 15
         // KeTee pium pium
-        yield return PlayQTE(QTEManager.QTEType.Triggers);
 
-        yield return Wait(0.5f);
-
-        yield return Subtitle(
-            "Guajiro: ¡Canela! ¡Quieta!",
-            2f,
-            vocesGuajiro[10]
+        yield return WaitUntilTimeline(
+            55.5
         );
 
-        yield return Wait(0.5f);
-
-        yield return Subtitle(
-            "Guajiro: ¡Ay, mi madre!",
-            1.5f,
-            vocesGuajiro[11]
+        yield return PlayQTE(
+            QTEManager.QTEType.Triggers
         );
 
-        yield return Wait(0.7f);
 
-        // pokemon black 2
-        yield return Blackout(1.5f);
+        // STORYBOARD 16 / 17
 
-        // se hace la lu'
-        yield return Subtitle(
-            "AMANECER",
-            1.5f,
-            vocesNarrador[2]
+        yield return SubtitleTimeline(
+            58.6,
+            60.0,
+            "Guajiro: ¡Canela! ¡Quieta!"
         );
 
-        yield return Subtitle(
-            "Guajiro: Ay… carijo…",
-            2f,
-            vocesGuajiro[12]
+        yield return SubtitleTimeline(
+            60.0,
+            60.8,
+            "Guajiro: ¡Ay, mi madre!"
         );
 
-        yield return Wait(1f);
 
-        yield return Subtitle(
-            "Guajiro: De muchacho aquello no tenía na’…",
-            2.5f,
-            vocesGuajiro[13]
+        // STORYBOARD 18
+        // negro
+
+
+        // STORYBOARD 19
+
+        yield return SubtitleTimeline(
+            63.3,
+            64.7,
+            "AMANECER"
         );
 
-        yield return Wait(1f);
 
-        // pueblo 
-        yield return Blackout(1f);
+        // STORYBOARD 20
 
-        yield return Subtitle(
-            "PUEBLO — MAÑANA",
-            1.5f,
-            vocesNarrador[3]
+        yield return SubtitleTimeline(
+            64.8,
+            66.8,
+            "Guajiro: Ay… carijo…"
         );
 
-        yield return Subtitle(
-            "Vecino: ¡Compay! ¿Qué le pasó?",
-            2f,
-            vocesPueblo[0]
+        yield return SubtitleTimeline(
+            67.0,
+            70.9,
+            "Guajiro: De muchacho aquello no tenía na’…"
         );
 
-        yield return Subtitle(
-            "Guajiro: Anoche encontré un muchachito llorando solo en el camino.",
-            3f,
-            vocesGuajiro[14]
+
+        // STORYBOARD 21
+        // pueblo
+
+        yield return SubtitleTimeline(
+            71.3,
+            72.8,
+            "PUEBLO — MAÑANA"
         );
 
-        yield return Subtitle(
-            "Vecina: ¿Y dónde está?",
-            1.8f,
-            vocesPueblo[1]
+        yield return SubtitleTimeline(
+            72.9,
+            74.8,
+            "Vecino: ¡Compay! ¿Qué le pasó?"
         );
 
-        yield return Subtitle(
-            "Guajiro: Eso no era ningún muchachito.",
-            2.5f,
-            vocesGuajiro[15]
+        yield return SubtitleTimeline(
+            75.0,
+            79.0,
+            "Guajiro: Anoche encontré un muchachito llorando solo en el camino."
         );
 
-        yield return Wait(1f);
+        yield return SubtitleTimeline(
+            79.1,
+            80.9,
+            "Vecina: ¿Y dónde está?"
+        );
 
-        yield return Subtitle(
+        yield return SubtitleTimeline(
+            81.0,
+            83.6,
+            "Guajiro: Eso no era ningún muchachito."
+        );
+
+        yield return SubtitleTimeline(
+            84.0,
+            88.5,
             "Guajiro: Le salió un diente así de largo…\n" +
-            "y después me dijo que tenía hambre.",
-            3.5f,
-            vocesGuajiro[16]
+            "y después me dijo que tenía hambre."
         );
 
-        yield return Wait(1.5f);
-
-        yield return Subtitle(
-            "Guajiro: Así que si oyen a una criatura llorando por el monte de noche…",
-            3.5f,
-            vocesGuajiro[17]
+        yield return SubtitleTimeline(
+            89.0,
+            94.5,
+            "Guajiro: Así que si oyen a una criatura llorando por el monte de noche…"
         );
 
-        yield return Wait(1f);
-
-        yield return Subtitle(
-            "Guajiro: …sigan pa’lante y no miren pa’trás.",
-            3f,
-            vocesGuajiro[18]
+        yield return SubtitleTimeline(
+            95.0,
+            99.0,
+            "Guajiro: …sigan pa’lante y no miren pa’trás."
         );
 
-        yield return Wait(1f);
-
-        // muejejeje
-        yield return Wait(2.5f);
-
-        blackPanel.SetActive(true);
-        subtitleText.text = "";
-    }
-
-    // subs
-
-    private IEnumerator Subtitle(string text, float duration)
-    {
-        subtitleText.text = text;
-
-        yield return new WaitForSeconds(duration);
+        yield return WaitUntilTimeline(
+            104.0
+        );
 
         subtitleText.text = "";
     }
 
-    private IEnumerator Subtitle(string text, float duration, AudioClip voice)
+
+    // subs sincronizados con Timeline
+
+    private IEnumerator SubtitleTimeline(
+        double startTime,
+        double endTime,
+        string text
+    )
     {
+        yield return WaitUntilTimeline(
+            startTime
+        );
+
         subtitleText.text = text;
 
-        if (voice != null)
+        yield return WaitUntilTimeline(
+            endTime
+        );
+
+        subtitleText.text = "";
+    }
+
+
+    // esperar directamente al tiempo del Timeline
+
+    private IEnumerator WaitUntilTimeline(
+        double targetTime
+    )
+    {
+        while (
+            timeline != null &&
+            timeline.time < targetTime
+        )
         {
-            voiceSource.Stop();
-            voiceSource.PlayOneShot(voice);
+            yield return null;
         }
-
-        yield return new WaitForSeconds(duration);
-
-        subtitleText.text = "";
     }
+
 
     // KeTeE
 
-    private IEnumerator PlayQTE(QTEManager.QTEType type)
+    private IEnumerator PlayQTE(
+        QTEManager.QTEType type
+    )
     {
         subtitleText.text = "";
+
         timeline.Pause();
 
-        yield return qteManager.Play(type);
+        yield return qteManager.Play(
+            type
+        );
 
         timeline.Resume();
     }
 
-    // waiteo
 
-    private IEnumerator Wait(float duration)
+    // voces guardadas por si volvemos a usarlas sin Timeline
+
+    private AudioClip GetVoice(
+        AudioClip[] voices,
+        int index
+    )
     {
-        yield return new WaitForSeconds(duration);
+        if (
+            voices == null ||
+            index < 0 ||
+            index >= voices.Length
+        )
+        {
+            return null;
+        }
+
+        return voices[index];
     }
 
-    // pokemon black
 
-    private IEnumerator Blackout(float duration)
+    // AUDIO DESACTIVADO
+    // AHORA LAS VOCES SE REPRODUCEN DESDE TIMELINE
+
+    /*
+    private void PlayVoice(
+        AudioClip voice
+    )
     {
-        subtitleText.text = "";
-
-        blackPanel.SetActive(true);
-
-        yield return new WaitForSeconds(duration);
-
-        blackPanel.SetActive(false);
+        if (
+            voice != null &&
+            voiceSource != null
+        )
+        {
+            voiceSource.PlayOneShot(
+                voice
+            );
+        }
     }
+    */
 }
