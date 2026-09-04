@@ -2,6 +2,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.SceneManagement;
 
 public class SceneSequence : MonoBehaviour
 {
@@ -44,8 +45,11 @@ public class SceneSequence : MonoBehaviour
 
         yield return null;
 
-        timeline.time = 0;
-        timeline.Play();
+        if (timeline != null)
+        {
+            timeline.time = 0;
+            timeline.Play();
+        }
 
         StartCoroutine(Story());
     }
@@ -311,11 +315,30 @@ public class SceneSequence : MonoBehaviour
             "Guajiro: …sigan pa’lante y no miren pa’trás."
         );
 
+
+        // FINAL
+
         yield return WaitUntilTimeline(
             104.0
         );
 
         subtitleText.text = "";
+
+        if (blackPanel != null)
+        {
+            blackPanel.SetActive(true);
+        }
+
+        yield return new WaitForSeconds(
+            1.5f
+        );
+
+        Time.timeScale = 1f;
+        AudioListener.pause = false;
+
+        SceneManager.LoadScene(
+            "Menu"
+        );
     }
 
 
@@ -365,13 +388,19 @@ public class SceneSequence : MonoBehaviour
     {
         subtitleText.text = "";
 
-        timeline.Pause();
+        if (timeline != null)
+        {
+            timeline.Pause();
+        }
 
         yield return qteManager.Play(
             type
         );
 
-        timeline.Resume();
+        if (timeline != null)
+        {
+            timeline.Resume();
+        }
     }
 
 
