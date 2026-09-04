@@ -1,13 +1,14 @@
 {
   "dependencies": {
-    "com.ady.unisense-extended": {
-      "version": "https://github.com/AlbertDaYoungYT/UniSense-Extended.git",
+    "com.morestories.unity_gyro_tools": {
+      "version": "https://github.com/garret-more-stories/unity_gyro_tools.git",
       "depth": 0,
       "source": "git",
       "dependencies": {
-        "com.unity.inputsystem": "1.5.0"
+        "com.unity.inputsystem": "1.14.2",
+        "com.unity.ext.nunit": "2.0.5"
       },
-      "hash": "a9a427e765d18ac1d93bc301afcdb72ad597756e"
+      "hash": "053f9c890ae1dcf07de8015a05bd1664f6e0179a"
     },
     "com.unity.ai.navigation": {
       "version": "2.0.14",

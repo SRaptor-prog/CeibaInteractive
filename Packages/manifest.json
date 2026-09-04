@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "com.ady.unisense-extended": "https://github.com/AlbertDaYoungYT/UniSense-Extended.git",
+    "com.morestories.unity_gyro_tools": "https://github.com/garret-more-stories/unity_gyro_tools.git",
     "com.unity.ai.navigation": "2.0.14",
     "com.unity.collab-proxy": "2.13.6",
     "com.unity.ide.rider": "3.0.40",
